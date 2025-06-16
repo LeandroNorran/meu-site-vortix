@@ -1,0 +1,29 @@
+name: Deploy Tailwind to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Instalar Tailwind e compilar
+        run: |
+          npm install -D tailwindcss
+          npx tailwindcss -i ./assets/styles/tailwind.css -o ./assets/styles/main.css --minify
+
+      - name: Commit e push do CSS gerado
+        run: |
+          git config --global user.email "you@example.com"
+          git config --global user.name "Seu Nome"
+          git add assets/styles/main.css
+          git commit -m "Gerando CSS do Tailwind"
+          git push
